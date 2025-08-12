@@ -18,7 +18,6 @@ class StateHomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 37, 37, 37),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -27,17 +26,12 @@ class StateHomePage extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Expanded(
+              Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: AutoSizeText(
                     "Notes",
-                    style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 43,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
               ),

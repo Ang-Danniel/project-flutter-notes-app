@@ -33,11 +33,7 @@ class NoteCard extends StatelessWidget {
               child: RichText(
                 text: TextSpan(
                   text: title,
-                  style: const TextStyle(
-                    fontFamily: "Nunito",
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
+                  style: Theme.of(context).textTheme.labelSmall,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 3,

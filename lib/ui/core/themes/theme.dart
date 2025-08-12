@@ -1,7 +1,51 @@
 import 'package:flutter/material.dart';
 
 class AppThemeData {
-  ThemeData lightTheme = ThemeData();
+  static ThemeData darkTheme = ThemeData(
+    colorScheme: darkColorScheme,
+    textTheme: const TextTheme(
+      titleLarge: TextStyle(
+        fontFamily: "Nunito",
+        fontSize: 44,
+        color: Colors.white,
+        fontWeight: FontWeight.w600,
+      ),
+      displayLarge: TextStyle(
+        fontFamily: "Nunito",
+        fontSize: 40,
+        color: AppColor.hintTextColor,
+      ),
+      displaySmall: TextStyle(
+        fontFamily: "Nunito",
+        fontSize: 24,
+        color: AppColor.hintTextColor,
+      ),
+      bodyLarge: TextStyle(
+        fontFamily: "Nunito",
+        fontSize: 40,
+        color: Colors.white,
+      ),
+      bodySmall: TextStyle(
+        fontFamily: "Nunito",
+        fontSize: 24,
+        color: Colors.white,
+      ),
+      labelSmall: TextStyle(
+        fontFamily: "Nunito",
+        color: Colors.black,
+        fontSize: 16,
+      ),
+    ),
+  );
+}
 
-  ThemeData darkTheme = ThemeData();
+const ColorScheme darkColorScheme = ColorScheme.dark(
+  surface: Color.fromARGB(255, 37, 37, 37),
+  primary: Color.fromRGBO(255, 158, 100, 1),
+  onPrimary: Colors.white,
+  onSurface: Colors.white,
+);
+
+class AppColor {
+  static const hintTextColor = Color.fromRGBO(147, 147, 147, 1);
 }

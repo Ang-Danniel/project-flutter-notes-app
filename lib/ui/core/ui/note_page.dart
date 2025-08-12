@@ -70,6 +70,7 @@ class _NotePageState extends State<NotePage> {
   }
 
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 37, 37, 37),
       body: Container(
@@ -163,17 +164,9 @@ class _NotePageState extends State<NotePage> {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: "Title",
-                hintStyle: TextStyle(
-                  fontFamily: "Nunito",
-                  fontSize: 40,
-                  color: Color.fromRGBO(147, 147, 147, 1),
-                ),
+                hintStyle: textTheme.displayLarge,
               ),
-              style: TextStyle(
-                fontFamily: "Nunito",
-                fontSize: 40,
-                color: Colors.white,
-              ),
+              style: textTheme.bodyLarge,
               maxLines: null,
             ),
             SizedBox(height: 10),
@@ -189,17 +182,9 @@ class _NotePageState extends State<NotePage> {
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "Type something...",
-                      hintStyle: TextStyle(
-                        fontFamily: "Nunito",
-                        fontSize: 24,
-                        color: Color.fromRGBO(147, 147, 147, 1),
-                      ),
+                      hintStyle: textTheme.displaySmall,
                     ),
-                    style: TextStyle(
-                      fontFamily: "Nunito",
-                      fontSize: 24,
-                      color: Colors.white,
-                    ),
+                    style: textTheme.bodySmall,
                     maxLines: null,
                   ),
                 ),
