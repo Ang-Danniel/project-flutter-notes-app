@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/data/model/notes.dart';
 import 'package:notes_app/data/services/note_service.dart';
+import 'package:notes_app/ui/core/themes/theme.dart';
 import 'package:notes_app/ui/notes/widgets/save_note_dialog.dart';
 
 class NotePage extends StatefulWidget {
-  bool isDraft;
-  Notes? note;
-  NotePage({super.key, required this.isDraft, this.note});
+  final bool isDraft;
+  final Notes? note;
+  const NotePage({super.key, required this.isDraft, this.note});
 
   @override
   State<NotePage> createState() => _NotePageState();
@@ -16,8 +17,10 @@ class _NotePageState extends State<NotePage> {
   final dbInstance = NoteService.instance;
   final titleController = TextEditingController();
   final contentController = TextEditingController();
+
   bool isDraft = true;
   bool isNotSaved = true;
+
   Notes? note;
 
   @override
@@ -25,9 +28,9 @@ class _NotePageState extends State<NotePage> {
     super.initState();
     note = widget.note ?? Notes("", "");
     isDraft = widget.isDraft;
-    if (isDraft)
+    if (isDraft) {
       isNotSaved = true;
-    else {
+    } else {
       if (widget.note == null) {
         throw Exception('Note cannot be null when isDraft is false');
       }
@@ -69,8 +72,10 @@ class _NotePageState extends State<NotePage> {
     setState(() {});
   }
 
+  @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final themes = Theme.of(context);
+    final textTheme = themes.textTheme;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 37, 37, 37),
       body: Container(
@@ -93,7 +98,7 @@ class _NotePageState extends State<NotePage> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    icon: const Icon(Icons.arrow_back),
                   ),
                 ),
                 (isDraft)
@@ -108,10 +113,7 @@ class _NotePageState extends State<NotePage> {
                           ),
                           child: IconButton(
                             onPressed: readOnlyMode,
-                            icon: const Icon(
-                              Icons.visibility,
-                              color: Colors.white,
-                            ),
+                            icon: const Icon(Icons.visibility),
                           ),
                         ),
                         Container(
@@ -124,19 +126,14 @@ class _NotePageState extends State<NotePage> {
                           child: IconButton(
                             onPressed: () {
                               showDialog(
-                                barrierColor: Color.fromRGBO(
-                                  196,
-                                  196,
-                                  196,
-                                  0.1,
-                                ),
+                                barrierColor: AppColor.barrierColor,
                                 context: context,
                                 builder: (BuildContext context) {
                                   return SaveNoteDialog(saveNotes: saveNotes);
                                 },
                               );
                             },
-                            icon: const Icon(Icons.save, color: Colors.white),
+                            icon: const Icon(Icons.save),
                           ),
                         ),
                       ],
@@ -150,7 +147,7 @@ class _NotePageState extends State<NotePage> {
                       ),
                       child: IconButton(
                         onPressed: editMode,
-                        icon: const Icon(Icons.edit, color: Colors.white),
+                        icon: const Icon(Icons.edit),
                       ),
                     ),
               ],
@@ -158,7 +155,7 @@ class _NotePageState extends State<NotePage> {
             SizedBox(height: 20),
             TextField(
               readOnly: !isDraft,
-              cursorColor: Color.fromRGBO(255, 255, 255, 0.7),
+              cursorColor: AppColor.cursorColor,
               cursorHeight: 36,
               controller: titleController,
               decoration: InputDecoration(
@@ -176,7 +173,7 @@ class _NotePageState extends State<NotePage> {
                   margin: EdgeInsets.symmetric(horizontal: 2),
                   child: TextField(
                     readOnly: !isDraft,
-                    cursorColor: Color.fromRGBO(255, 255, 255, 0.7),
+                    cursorColor: AppColor.cursorColor,
                     cursorHeight: 20,
                     controller: contentController,
                     decoration: InputDecoration(

@@ -17,6 +17,8 @@ class HomePage extends StatefulWidget {
 class StateHomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final themes = Theme.of(context);
+    final textTheme = themes.textTheme;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -28,11 +30,8 @@ class StateHomePage extends State<HomePage> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: AutoSizeText(
-                    "Notes",
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+                  padding: const EdgeInsets.only(left: 20),
+                  child: AutoSizeText("Notes", style: textTheme.titleLarge),
                 ),
               ),
               Container(
@@ -44,7 +43,7 @@ class StateHomePage extends State<HomePage> {
                 ),
                 child: IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.search, color: Colors.white),
+                  icon: const Icon(Icons.search),
                 ),
               ),
               Container(
@@ -56,7 +55,7 @@ class StateHomePage extends State<HomePage> {
                 ),
                 child: IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.info_outline, color: Colors.white),
+                  icon: const Icon(Icons.info_outline),
                 ),
               ),
             ],
@@ -84,10 +83,8 @@ class StateHomePage extends State<HomePage> {
                                 ),
                                 Text(
                                   "Create your first note!",
-                                  style: TextStyle(
-                                    fontFamily: "Nunito",
+                                  style: textTheme.bodySmall!.copyWith(
                                     fontSize: 20,
-                                    color: Colors.white,
                                   ),
                                 ),
                                 SizedBox(height: 80),
@@ -104,7 +101,7 @@ class StateHomePage extends State<HomePage> {
         child: Container(
           width: 60,
           height: 60,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
@@ -131,9 +128,9 @@ class StateHomePage extends State<HomePage> {
               );
             },
             shape: const CircleBorder(),
-            backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
+            backgroundColor: themes.colorScheme.surface,
             elevation: 0, // Set elevation to 0 to remove the default shadow
-            child: const Icon(Icons.add, color: Colors.white, size: 36),
+            child: const Icon(Icons.add, size: 36),
           ),
         ),
       ),

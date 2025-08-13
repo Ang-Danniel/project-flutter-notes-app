@@ -48,4 +48,8 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
 
 class AppColor {
   static const hintTextColor = Color.fromRGBO(147, 147, 147, 1);
+  static const acceptButtonColor = Colors.green;
+  static const rejectButonColor = Colors.red;
+  static const cursorColor = Color.fromRGBO(255, 255, 255, 0.7);
+  static const barrierColor = Color.fromRGBO(196, 196, 196, 0.1);
 }
