@@ -48,6 +48,23 @@ class _NotePageState extends State<NotePage> {
     super.dispose();
   }
 
+  void saveNoteDialog(BuildContext context, GlobalKey key) {
+    if (titleController.text == "" || contentController.text == "") {
+      showInfoBubble(
+        "Warning",
+        "Put the title and content first before saving!",
+        key,
+        AppColor.hintTextColor,
+      );
+      return;
+    }
+    showDialog(
+      context: context,
+      barrierColor: AppColor.barrierColor,
+      builder: (context) => SaveNoteDialog(saveNotes: saveNotes),
+    );
+  }
+
   void saveNotes() {
     if (titleController.text == "" || contentController.text == "") {
       return;
@@ -84,6 +101,7 @@ class _NotePageState extends State<NotePage> {
   @override
   Widget build(BuildContext context) {
     final readOnlyButtonKey = GlobalKey();
+    final saveButtonKey = GlobalKey();
     final themes = Theme.of(context);
     final textTheme = themes.textTheme;
     return Scaffold(
@@ -135,15 +153,9 @@ class _NotePageState extends State<NotePage> {
                             color: const Color.fromARGB(255, 59, 59, 59),
                           ),
                           child: IconButton(
-                            onPressed: () {
-                              showDialog(
-                                barrierColor: AppColor.barrierColor,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return SaveNoteDialog(saveNotes: saveNotes);
-                                },
-                              );
-                            },
+                            key: saveButtonKey,
+                            onPressed:
+                                () => saveNoteDialog(context, saveButtonKey),
                             icon: const Icon(Icons.save),
                           ),
                         ),
