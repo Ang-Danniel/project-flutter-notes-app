@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:notes_app/data/model/notes.dart';
 import 'package:notes_app/data/services/note_service.dart';
 import 'package:notes_app/ui/core/themes/theme.dart';
+import 'package:notes_app/ui/notes/widgets/bubble_info_dialog.dart';
 import 'package:notes_app/ui/notes/widgets/save_note_dialog.dart';
 
 class NotePage extends StatefulWidget {
@@ -19,7 +20,7 @@ class _NotePageState extends State<NotePage> {
   final contentController = TextEditingController();
 
   bool isDraft = true;
-  bool isNotSaved = true;
+  bool isSaved = false;
 
   Notes? note;
 
@@ -29,14 +30,14 @@ class _NotePageState extends State<NotePage> {
     note = widget.note ?? Notes("", "");
     isDraft = widget.isDraft;
     if (isDraft) {
-      isNotSaved = true;
+      isSaved = false;
     } else {
       if (widget.note == null) {
         throw Exception('Note cannot be null when isDraft is false');
       }
       titleController.text = widget.note!.title ?? " ";
       contentController.text = widget.note!.description ?? " ";
-      isNotSaved = false;
+      isSaved = true;
     }
   }
 
@@ -56,24 +57,33 @@ class _NotePageState extends State<NotePage> {
     note!.description = contentController.text;
     dbInstance.saveOrUpdateNote(note!);
     isDraft = false;
-    isNotSaved = false;
+    isSaved = true;
     setState(() {});
   }
 
   void editMode() {
-    if (isNotSaved) return;
+    if (!isSaved) return;
     isDraft = true;
     setState(() {});
   }
 
-  void readOnlyMode() {
-    if (isNotSaved) return;
+  void readOnlyMode(GlobalKey key) {
+    if (!isSaved) {
+      showInfoBubble(
+        "Info",
+        "Save the note first before entering read only mode",
+        key,
+        AppColor.hintTextColor,
+      );
+      return;
+    }
     isDraft = false;
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final readOnlyButtonKey = GlobalKey();
     final themes = Theme.of(context);
     final textTheme = themes.textTheme;
     return Scaffold(
@@ -112,7 +122,8 @@ class _NotePageState extends State<NotePage> {
                             color: const Color.fromARGB(255, 59, 59, 59),
                           ),
                           child: IconButton(
-                            onPressed: readOnlyMode,
+                            key: readOnlyButtonKey,
+                            onPressed: () => readOnlyMode(readOnlyButtonKey),
                             icon: const Icon(Icons.visibility),
                           ),
                         ),
