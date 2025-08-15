@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:notes_app/data/model/notes.dart';
 import 'package:notes_app/data/services/note_service.dart';
 import 'package:notes_app/ui/core/themes/theme.dart';
+import 'package:notes_app/ui/notes/widgets/back_app_bar_widget.dart';
+import 'package:notes_app/ui/notes/widgets/base_scaffold.dart';
 import 'package:notes_app/ui/notes/widgets/bubble_info_dialog.dart';
 import 'package:notes_app/ui/notes/widgets/save_note_dialog.dart';
 
@@ -104,115 +106,125 @@ class _NotePageState extends State<NotePage> {
     final saveButtonKey = GlobalKey();
     final themes = Theme.of(context);
     final textTheme = themes.textTheme;
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 37, 37, 37),
-      body: Container(
-        margin: const EdgeInsets.only(left: 20, right: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+    return BaseScreen(
+      columnChildren: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 20, bottom: 5),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(16),
-                    color: const Color.fromARGB(255, 59, 59, 59),
-                  ),
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                ),
-                (isDraft)
-                    ? Row(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 20, bottom: 5),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(16),
-                            color: const Color.fromARGB(255, 59, 59, 59),
-                          ),
-                          child: IconButton(
-                            key: readOnlyButtonKey,
-                            onPressed: () => readOnlyMode(readOnlyButtonKey),
-                            icon: const Icon(Icons.visibility),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(16),
-                            color: const Color.fromARGB(255, 59, 59, 59),
-                          ),
-                          child: IconButton(
-                            key: saveButtonKey,
-                            onPressed:
-                                () => saveNoteDialog(context, saveButtonKey),
-                            icon: const Icon(Icons.save),
-                          ),
-                        ),
-                      ],
-                    )
-                    : Container(
-                      margin: const EdgeInsets.only(right: 4, bottom: 5),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(16),
-                        color: const Color.fromARGB(255, 59, 59, 59),
-                      ),
-                      child: IconButton(
-                        onPressed: editMode,
-                        icon: const Icon(Icons.edit),
-                      ),
-                    ),
-              ],
-            ),
-            SizedBox(height: 20),
-            TextField(
-              readOnly: !isDraft,
-              cursorColor: AppColor.cursorColor,
-              cursorHeight: 36,
-              controller: titleController,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "Title",
-                hintStyle: textTheme.displayLarge,
-              ),
-              style: textTheme.bodyLarge,
-              maxLines: null,
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 2),
-                  child: TextField(
-                    readOnly: !isDraft,
-                    cursorColor: AppColor.cursorColor,
-                    cursorHeight: 20,
-                    controller: contentController,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Type something...",
-                      hintStyle: textTheme.displaySmall,
-                    ),
-                    style: textTheme.bodySmall,
-                    maxLines: null,
-                  ),
-                ),
-              ),
-            ),
+            BackAppBarWidget(),
+            (isDraft)
+                ? _AppBarReadModeButtons(
+                  readOnlyMode: readOnlyMode,
+                  saveNoteDialog: saveNoteDialog,
+                  saveButtonKey: saveButtonKey,
+                  readOnlyButtonKey: readOnlyButtonKey,
+                )
+                : _AppBarEditModeButtons(editMode: editMode),
           ],
         ),
+        const SizedBox(height: 20),
+        TextField(
+          readOnly: !isDraft,
+          cursorColor: AppColor.cursorColor,
+          cursorHeight: 36,
+          controller: titleController,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: "Title",
+            hintStyle: textTheme.displayLarge,
+          ),
+          style: textTheme.bodyLarge,
+          maxLines: null,
+        ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 2),
+              child: TextField(
+                readOnly: !isDraft,
+                cursorColor: AppColor.cursorColor,
+                cursorHeight: 20,
+                controller: contentController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Type something...",
+                  hintStyle: textTheme.displaySmall,
+                ),
+                style: textTheme.bodySmall,
+                maxLines: null,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AppBarEditModeButtons extends StatelessWidget {
+  final VoidCallback editMode;
+  const _AppBarEditModeButtons({super.key, required this.editMode});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 4, bottom: 5),
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(16),
+        color: const Color.fromARGB(255, 59, 59, 59),
       ),
+      child: IconButton(onPressed: editMode, icon: const Icon(Icons.edit)),
+    );
+  }
+}
+
+class _AppBarReadModeButtons extends StatelessWidget {
+  final Function(GlobalKey key) readOnlyMode;
+  final Function(BuildContext context, GlobalKey key) saveNoteDialog;
+  final GlobalKey saveButtonKey;
+  final GlobalKey readOnlyButtonKey;
+
+  const _AppBarReadModeButtons({
+    super.key,
+    required this.readOnlyMode,
+    required this.saveNoteDialog,
+    required this.saveButtonKey,
+    required this.readOnlyButtonKey,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(right: 20, bottom: 5),
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(16),
+            color: const Color.fromARGB(255, 59, 59, 59),
+          ),
+          child: IconButton(
+            key: readOnlyButtonKey,
+            onPressed: () => readOnlyMode(readOnlyButtonKey),
+            icon: const Icon(Icons.visibility),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(bottom: 5),
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(16),
+            color: const Color.fromARGB(255, 59, 59, 59),
+          ),
+          child: IconButton(
+            key: saveButtonKey,
+            onPressed: () => saveNoteDialog(context, saveButtonKey),
+            icon: const Icon(Icons.save),
+          ),
+        ),
+      ],
     );
   }
 }
