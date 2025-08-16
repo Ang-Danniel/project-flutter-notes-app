@@ -35,6 +35,13 @@ class NoteService {
     yield* isar.notes.where().watch(fireImmediately: true);
   }
 
+  Future<List<Notes>> filterTitle(String title) async {
+    final isar = await db;
+    final result = await isar.notes.filter().titleContains("name").findAll();
+
+    return result;
+  }
+
   Future<Isar> openDB() async {
     final dir = await getApplicationDocumentsDirectory();
 

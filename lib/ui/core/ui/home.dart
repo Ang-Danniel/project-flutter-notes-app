@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:notes_app/data/model/notes.dart';
 import 'package:notes_app/data/services/note_service.dart';
 import 'package:notes_app/ui/core/ui/note_page.dart';
+import 'package:notes_app/ui/core/ui/note_saerch.dart';
 import 'package:notes_app/ui/notes/widgets/note_card.dart';
 
 final NoteService dbInstance = NoteService.instance;
@@ -42,7 +43,11 @@ class StateHomePage extends State<HomePage> {
                   color: const Color.fromARGB(255, 59, 59, 59),
                 ),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => NoteSaerch()),
+                    );
+                  },
                   icon: const Icon(Icons.search),
                 ),
               ),

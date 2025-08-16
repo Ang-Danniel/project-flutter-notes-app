@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 class BackAppBarWidget extends StatelessWidget {
-  const BackAppBarWidget({super.key});
+  final double? width;
+  final double? height;
+  const BackAppBarWidget({super.key, this.width, this.height});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width,
+      height: height,
       margin: const EdgeInsets.only(right: 20, bottom: 5),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
